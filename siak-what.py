@@ -19,16 +19,12 @@ def war(username, password, display_name):
 
     login(driver, username, password, display_name)
     
-    matkul=[]
-    with open('matkul.txt') as file_inp:
-        for line in file_inp:
-            matkul.append(line.strip())
-
     while True:
         try:
             driver.get("https://academic.ui.ac.id/main/CoursePlan/CoursePlanEdit")
             element = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, "rinfo")))           
             # Keep this up to date
+            # ganti dengan matkul yang namanya pasti ada
             if ("Analisis Numerik" in driver.page_source):
                 break
             raise NoSuchElementException
@@ -37,6 +33,12 @@ def war(username, password, display_name):
             logout(driver)
             login(driver, username, password, display_name)
             continue
+
+    matkul=[]
+    with open('matkul.txt') as file_inp:
+        for line in file_inp:
+            matkul.append(line.strip())
+        print("Matkul Loaded")
 
     try:
         for kelas in matkul:
@@ -63,8 +65,8 @@ def war(username, password, display_name):
                 print("Process finished! Press enter to exit...")
                 break
             else:
+                print("Mencoba simpan IRS...")
                 driver.refresh()
-                print("Something wrong")
 
     input()
     driver.close()
